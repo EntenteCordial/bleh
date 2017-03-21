@@ -16,7 +16,9 @@ where A is `+`, `-`, `*`, `/`
 
 ### call function
 
-```identifier([arguments])```
+```
+identifier([arguments])
+```
 
 ## commands
 
