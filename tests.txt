@@ -1,0 +1,24 @@
+Integer test:
+10
+---
+String test:
+hello
+---
+Integer comparison test:
+compare 10 and 10: 1
+compare 10 and 20: 0
+---
+String comparison test:
+Hello, Hello
+compare Hello and Hello: 1
+Hello, Goodbye
+compare Hello and Goodbye: 0
+---
+Object dicitonary:
+Dictionary length: 0/2
+Dictionary length: 1/2
+0Dictionary value at 10: test
+Dictionary length: 2/2
+01Dictionary value at 11: test2
+Dictionary length: 3/4
+Segmentation fault
