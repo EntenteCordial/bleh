@@ -22,11 +22,13 @@ identifier([arguments])
 
 ## commands
 
-## definition
+### definition
 
-```identifier = [string]/[int];```
+```
+identifier = [string]/[int];
+```
 
-## function
+### function
 
 ```
 function identifier([arguments]){
