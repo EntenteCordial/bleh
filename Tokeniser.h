@@ -18,6 +18,7 @@ typedef struct {
 	char* value;
 	
 	Token** tokens;
+	int length;
 
 } Tokeniser;
 
@@ -27,10 +28,10 @@ void Tokeniser_create(Tokeniser* t, char* value);
 void Tokeniser_destroy(Tokeniser* t);
 
 void Tokeniser_tokenise(Tokeniser* t);
-Token Tokeniser_tokenise_operator(Tokeniser* t);
-Token Tokeniser_tokenise_identifier(Tokeniser* t);
-Token Tokeniser_tokenise_string(Tokeniser* t);
-Token Tokeniser_tokenise_integer(Tokeniser* t);
+Token* Tokeniser_tokenise_operator(Tokeniser* t);
+Token* Tokeniser_tokenise_identifier(Tokeniser* t);
+Token* Tokeniser_tokenise_string(Tokeniser* t);
+Token* Tokeniser_tokenise_integer(Tokeniser* t);
 
 void Tokeniser_add(Tokeniser* t, Token* tok);
 

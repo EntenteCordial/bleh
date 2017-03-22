@@ -30,6 +30,7 @@ void Tokeniser_add(Tokeniser* t, Token* tok){
 	} else {
 		t->tokens = (Token**)tmp_tokens;
 		t->tokens[t->length] = tok;
+		//t->tokens[t->length]->v = tok->value;
 		t->length++;
 	}
 };
@@ -45,7 +46,7 @@ void Tokeniser_tokenise(Tokeniser* t){
 			continue;
 		}
 		
-		Token token;
+		Token* token;
 		if(current == '"' || current == '\''){ // string
 			token = Tokeniser_tokenise_string(t);
 		} else if (
@@ -57,20 +58,19 @@ void Tokeniser_tokenise(Tokeniser* t){
 		) { // operator
 			token = Tokeniser_tokenise_operator(t);
 		} else if (isdigit(current)) {// number
-			token = Tokeniser_tokenise_number(t);
+			token = Tokeniser_tokenise_integer(t);
 		} else if (isalpha(current)) { // identifier
 			token = Tokeniser_tokenise_identifier(t);
 		} else {
 			printf("SyntaxError: unexpected %c\n", current); // TODO error
 			return;
 		}
-		Tokeniser_add(t, &token);
+		
+		Tokeniser_add(t, token);
 	}
 };
 
-Token Tokeniser_tokenise_operator(Tokeniser* t){
-	Token token;
-	
+Token* Tokeniser_tokenise_operator(Tokeniser* t){
 	char current = Tokeniser_current(t);
 	char next = Tokeniser_next(t);
 	char* string;
@@ -87,13 +87,12 @@ Token Tokeniser_tokenise_operator(Tokeniser* t){
 	}
 	
 	printf("OPERATOR %s\n", string);
-	Token_create(&token, OPERATOR_TOKEN, string);
+	Token* token = (Token*)malloc(sizeof(int) + sizeof(string));
+	Token_create(token, OPERATOR_TOKEN, string);
 	return token;
 };
 
-Token Tokeniser_tokenise_identifier(Tokeniser* t){
-	Token token;
-	
+Token* Tokeniser_tokenise_identifier(Tokeniser* t){
 	char* string = malloc(sizeof(char));
 	*string = Tokeniser_current(t);
 	t->position++;
@@ -114,13 +113,12 @@ Token Tokeniser_tokenise_identifier(Tokeniser* t){
 	
 	printf("IDENTIFIER %s\n", string);
 	
-	Token_create(&token, IDENTIFIER_TOKEN, string);
+	Token* token = (Token*)malloc(sizeof(int) + sizeof(string));
+	Token_create(token, IDENTIFIER_TOKEN, string);
 	return token;
 };
 
-Token Tokeniser_tokenise_string(Tokeniser* t){
-	Token token;
-	
+Token* Tokeniser_tokenise_string(Tokeniser* t){
 	char begin = Tokeniser_current(t);
 	t->position++;
 	
@@ -145,20 +143,19 @@ Token Tokeniser_tokenise_string(Tokeniser* t){
 	
 	//putchar(Tokeniser_current(t));
 	if(Tokeniser_current(t) != begin) {
-		//printf("SyntaxError: expected %c\n", begin); // TODO error
+		printf("SyntaxError: expected %c\n", begin); // TODO error
 		//return NULL;
 	}
 	t->position++;
 	
 	printf("STRING %s\n", string);
 	
-	Token_create(&token, STRING_TOKEN, string);
+	Token* token = (Token*) malloc(sizeof(int) + sizeof(string));
+	Token_create(token, STRING_TOKEN, string);
 	return token;
 };
 
-Token Tokeniser_tokenise_integer(Tokeniser* t){
-	Token token;
-	
+Token* Tokeniser_tokenise_integer(Tokeniser* t){
 	char* string = malloc(sizeof(char));
 	*string = Tokeniser_current(t);
 	t->position++;
@@ -179,7 +176,8 @@ Token Tokeniser_tokenise_integer(Tokeniser* t){
 	
 	printf("INTEGER %s\n", string);
 	
-	Token_create(&token, IDENTIFIER_TOKEN, string);
+	Token* token = (Token*) malloc(sizeof(int) + sizeof(string));
+	Token_create(token, IDENTIFIER_TOKEN, string);
 	return token;
 };
 
@@ -204,4 +202,6 @@ char Tokeniser_next(Tokeniser* t){
 void Token_create(Token* t, int type, char* value){
 	t->type = type;
 	t->value = value;
+	//t->type = type;
+	//t->value = value;
 };

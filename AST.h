@@ -5,17 +5,17 @@
 #define EXPRESSION_TYPE 0
 #define VALUE_TYPE 1
 
-#define PLUS_OP 0
-#define MINUS_OP 1
-#define MULT_OP 2
-#define DIV_OP 3
-
 #define DEFINITION_TREE 0
 #define CALL_TREE 1
 #define FUNCTION_TREE 2
 #define ARGUMENT_TREE 3
 #define IF_TREE 4
 #define WHILE_TREE 5
+
+#define PLUS_OP 0
+#define MINUS_OP 1
+#define MULT_OP 2
+#define DIV_OP 3
 
 // Value
 typedef struct {
