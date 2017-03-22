@@ -2,15 +2,36 @@
 #include <stdlib.h>
 #include "Object.h"
 
-// Objects
+// Object creation
 void Object_create(Object* o){
 	o->type = OBJECT_TYPE;
-	Object_create_dict(o);
+	o->first = NULL;
+	o->last = NULL;
+};
+
+// Integer
+void Integer_create(Object* o, int value){
+	o->type = INTEGER_TYPE;
+	o->value.as_int = value;
+	o->first = NULL;
+	o->last = NULL;
+};
+
+// String
+void String_create(Object* o, char* value){
+	o->type = STRING_TYPE;
+	o->value.as_string = value;
+	o->first = NULL;
+	o->last = NULL;
+};
+
+// Object prototype
+void Object_create_dict(Object* o){
+	o->first = NULL;
+	o->last = NULL;
 };
 
 void Object_destroy(Object* o){
-	free(o->keys);
-	free(o->values);
 };
 
 void* Object_get(Object* o){
@@ -40,50 +61,35 @@ bool Object_compare(Object* o1, Object* o2){
 };
 
 // Object dictionary
-void Object_create_dict(Object* o){
-	o->length = 0;
-	o->capacity = INITIAL_CAPACITY;
-	o->keys = malloc(sizeof(Object) * o->capacity);
-	o->values = malloc(sizeof(Object) * o->capacity);
+void ObjectPair_create(ObjectPair* o, Object* key, Object* value){
+	o->key = key;
+	o->value = value;
+	o->next = NULL;
 };
 
 Object* Object_get_dict(Object* o, Object* key){
-	int i;
-	for(i = 0; i < o->length; i++) {
-		if(Object_compare(o->keys[i], key)) {
-			return o->values[i];
+	ObjectPair* current = o->last;
+	//printf("%s", current->value->value.as_string);
+	//return o->last->value;
+	while(current != NULL){
+		if(Object_compare(current->key, key)){
+			return current->value;
+		} else {
+			current = current->next;
 		}
 	}
 	return NULL;
 };
 
 void Object_set_dict(Object* o, Object* key, Object* value){
-	if(o->length == o->capacity) {
-		o->capacity *= 2;
-		void* tmp_keys = realloc(o->keys, sizeof(Object) * o->capacity);
-		void* tmp_values = realloc(o->values, sizeof(Object) * o->capacity);
-		if (tmp_keys == NULL || tmp_values == NULL) {
-			return;
-		} else {
-			o->keys = (Object*)tmp_keys;
-			o->values = (Object*)tmp_values;
-		}
+	ObjectPair* pair = (ObjectPair*)malloc(sizeof(ObjectPair));
+	ObjectPair_create(pair, key, value);
+	if(o->first == NULL){
+		o->first = pair;
+		o->last = pair;
+	} else {
+		o->last->next = pair;
+		o->last = pair;
 	}
-	o->keys[o->length] = key;
-	o->values[o->length] = value;
-	o->length++;
-};
-
-// Integer
-void Integer_create(Object* o, int value){
-	o->type = INTEGER_TYPE;
-	o->value.as_int = value;
-	Object_create_dict(o);
-};
-
-// String
-void String_create(Object* o, char* value){
-	o->type = STRING_TYPE;
-	o->value.as_string = value;
-	Object_create_dict(o);
+	//printf("%s", o->last->value->value.as_string);
 };
