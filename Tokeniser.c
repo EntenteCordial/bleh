@@ -202,6 +202,4 @@ char Tokeniser_next(Tokeniser* t){
 void Token_create(Token* t, int type, char* value){
 	t->type = type;
 	t->value = value;
-	//t->type = type;
-	//t->value = value;
 };
